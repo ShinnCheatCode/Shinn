@@ -19,6 +19,8 @@ targets:
 
     sources:
       - path: ThreeOneOSFive
+        excludes:
+          - "Info.plist"
 
     info:
       path: ThreeOneOSFive/Info.plist
