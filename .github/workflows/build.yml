@@ -1,4 +1,51 @@
-- name: Package IPA
+name: Build 3105
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show repo tree
+        run: |
+          ls -la
+          find . -maxdepth 3 -type f | head -50
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate project
+        run: xcodegen generate --spec project.yml
+
+      - name: Build
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project 3105.xcodeproj \
+            -scheme 3105 \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            PROVISIONING_PROFILE_SPECIFIER="" \
+            clean build \
+            2>&1 | tee xcodebuild.log
+
+      - name: Show errors
+        if: failure()
+        run: grep -n -B5 -A5 "error:" xcodebuild.log || true
+
+      - name: Package IPA
         if: success()
         run: |
           set -euo pipefail
@@ -13,3 +60,10 @@
           mkdir -p artifact/Payload
           cp -R "$APP_PATH" artifact/Payload/3105.app
           cd artifact && zip -qry ../3105-unsigned.ipa Payload
+
+      - name: Upload
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 3105-unsigned-ipa
+          path: 3105-unsigned.ipa
