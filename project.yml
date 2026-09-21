@@ -26,8 +26,6 @@ targets:
           - "vi.Iproj/**"
           - "*.entitlements"
 
-      - path: ThreeOneOSFive-Bridging-Header.h
-
     resources:
       - path: ThreeOneOSFive/Resources
       - path: ThreeOneOSFive/vi.Iproj
@@ -51,8 +49,6 @@ targets:
 
         SWIFT_VERSION: "5.0"
 
-        SWIFT_OBJC_BRIDGING_HEADER: "$(SRCROOT)/ThreeOneOSFive-Bridging-Header.h"
-
         CODE_SIGNING_ALLOWED: "NO"
         CODE_SIGNING_REQUIRED: "NO"
         CODE_SIGN_IDENTITY: ""
@@ -66,8 +62,6 @@ targets:
 
         HEADER_SEARCH_PATHS:
           - "$(SRCROOT)/ThreeOneOSFive"
-          - "$(SRCROOT)/ThreeOneOSFive/exploit"
-          - "$(SRCROOT)/ThreeOneOSFive/kexploit"
           - "$(SRCROOT)/ThreeOneOSFive/helpers"
 
         OTHER_LDFLAGS:
