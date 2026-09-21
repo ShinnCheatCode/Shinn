@@ -1,53 +1,15 @@
-name: Build 3105
-
-on:
-  workflow_dispatch:
-  push:
-    branches: [ main ]
-
-jobs:
-  build:
-    runs-on: macos-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install XcodeGen
-        run: brew install xcodegen
-
-      - name: Generate project
-        run: xcodegen generate --spec project.yml
-
-      - name: Build
-        run: |
-          xcodebuild \
-            -project 3105.xcodeproj \
-            -scheme 3105 \
-            -configuration Release \
-            -sdk iphoneos \
-            -destination 'generic/platform=iOS' \
-            -derivedDataPath build \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="" \
-            PROVISIONING_PROFILE_SPECIFIER="" \
-            clean build \
-            2>&1 | tee xcodebuild.log
-
-      - name: Show errors
-        if: failure()
-        run: grep -n -B5 -A5 "error:" xcodebuild.log || true
-
-      - name: Package IPA
+- name: Package IPA
         if: success()
         run: |
+          set -euo pipefail
+          APP_PATH=$(find build/Build/Products -type d -name "3105.app" -print -quit)
+          if [ -z "$APP_PATH" ]; then
+            echo "❌ Không tìm thấy 3105.app"
+            find build/Build/Products -type d -name "*.app" -print
+            exit 1
+          fi
+          echo "✅ Tìm thấy: $APP_PATH"
+          rm -rf artifact
           mkdir -p artifact/Payload
-          cp -R build/Build/Products/Release-iphoneos/3105.app artifact/Payload/
+          cp -R "$APP_PATH" artifact/Payload/3105.app
           cd artifact && zip -qry ../3105-unsigned.ipa Payload
-
-      - name: Upload
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: 3105-unsigned-ipa
-          path: 3105-unsigned.ipa
