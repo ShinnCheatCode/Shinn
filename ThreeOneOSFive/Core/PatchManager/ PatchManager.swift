@@ -26,7 +26,7 @@ final class PatchManager {
         var restored = 0
         for bundleID in targets {
             guard let container = ContainerManagerBridge().containerPath(for: bundleID) else { continue }
-            PatchBackup().restore(patch: patch, bundleID: bundleID, container: container)
+            try PatchBackup().restore(patch: patch, bundleID: bundleID, container: container)
             restored += 1
         }
         return PatchResult(success: true, appliedCount: restored, message: "Đã khôi phục")
@@ -47,6 +47,4 @@ final class PatchManager {
 
 struct PatchResult {
     let success: Bool
-    let appliedCount: Int
-    let message: String
-}
+    let appliedCount:
