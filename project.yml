@@ -1,63 +1,62 @@
-name: "3105"
+name: Build 3105
 
-options:
-  bundleIdPrefix: com.apple.mobile
-  deploymentTarget:
-    iOS: "16.0"
-  xcodeVersion: "16.0"
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
 
-settings:
-  base:
-    SWIFT_VERSION: "5.0"
-    DEVELOPMENT_TEAM: ""
-    IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+jobs:
+  build:
+    runs-on: macos-latest
 
-targets:
-  "3105":
-    type: application
-    platform: iOS
+    steps:
+      - uses: actions/checkout@v4
 
-    sources:
-      - path: ThreeOneOSFive
+      - name: Install XcodeGen
+        run: brew install xcodegen
 
-    info:
-      path: ThreeOneOSFive/Info.plist
-      properties:
-        CFBundleDisplayName: Shinn Cheat
-        CFBundleShortVersionString: "2.0"
-        CFBundleVersion: "1"
+      - name: Generate project
+        run: xcodegen generate --spec project.yml
 
-    settings:
-      base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.apple.mobile.MobileHouseArrest
-        INFOPLIST_FILE: ThreeOneOSFive/Info.plist
-        SWIFT_OBJC_BRIDGING_HEADER: ThreeOneOSFive/ThreeOneOSFive-Bridging-Header.h
-        TARGETED_DEVICE_FAMILY: "1,2"
-        SWIFT_VERSION: "5.0"
-        CODE_SIGNING_ALLOWED: "NO"
-        CODE_SIGNING_REQUIRED: "NO"
-        CODE_SIGN_IDENTITY: ""
-        PROVISIONING_PROFILE_SPECIFIER: ""
-        ENABLE_BITCODE: "NO"
-        CLANG_ENABLE_MODULES: "YES"
-        CLANG_ENABLE_OBJC_ARC: "YES"
-        HEADER_SEARCH_PATHS:
-          - "$(SRCROOT)/ThreeOneOSFive"
-          - "$(SRCROOT)/ThreeOneOSFive/exploit"
-          - "$(SRCROOT)/ThreeOneOSFive/kexploit"
-          - "$(SRCROOT)/ThreeOneOSFive/helpers"
-        OTHER_LDFLAGS:
-          - "-lz"
-          - "-framework"
-          - "Foundation"
-          - "-framework"
-          - "UIKit"
-          - "-framework"
-          - "IOSurface"
-          - "-framework"
-          - "AVFoundation"
-          - "-framework"
-          - "Security"
+      - name: Build
+        run: |
+          xcodebuild \
+            -project 3105.xcodeproj \
+            -scheme 3105 \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            PROVISIONING_PROFILE_SPECIFIER="" \
+            clean build \
+            2>&1 | tee xcodebuild.log
 
-    scheme:
-      testTargets: []
+      - name: Show errors
+        if: failure()
+        run: grep -n -B5 -A5 "error:" xcodebuild.log || true
+
+      - name: Package IPA
+        if: success()
+        run: |
+          set -euo pipefail
+          APP_PATH=$(find build/Build/Products -type d -name "3105.app" -print -quit)
+          if [ -z "$APP_PATH" ]; then
+            echo "❌ Không tìm thấy 3105.app"
+            find build/Build/Products -type d -name "*.app" -print
+            exit 1
+          fi
+          echo "✅ Tìm thấy: $APP_PATH"
+          rm -rf artifact
+          mkdir -p artifact/Payload
+          cp -R "$APP_PATH" artifact/Payload/3105.app
+          cd artifact && zip -qry ../3105-unsigned.ipa Payload
+
+      - name: Upload
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 3105-unsigned-ipa
+          path: 3105-unsigned.ipa
