@@ -4,7 +4,6 @@ options:
   bundleIdPrefix: com.apple.mobile
   deploymentTarget:
     iOS: "16.0"
-  xcodeVersion: "16.0"
 
 settings:
   base:
@@ -24,10 +23,6 @@ targets:
           - "en.Iproj/**"
           - "zh-Hans.Iproj/**"
           - "*.entitlements"
-
-    resources:
-      - path: ThreeOneOSFive/en.Iproj
-      - path: ThreeOneOSFive/zh-Hans.Iproj
 
     info:
       path: ThreeOneOSFive/Info.plist
