@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "repos": [
+    {
+      "id": "com.mhieuushinn.shinncheat",
+      "name": "Shinn Cheat",
+      "url": "https://raw.githubusercontent.com/mhieuushinn-dev/ShinnCheatShare/main/ShinnThieuu.json",
+      "icon": "wand.and.stars",
+      "enabled": true,
+      "isDefault": true
+    }
+  ]
+}
