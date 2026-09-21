@@ -1,9 +1,17 @@
 import Foundation
 
 final class WallpaperLab {
-    func importPackage(from path: String) -> WallpaperResult { return WallpaperResult() }
-    func install(package: WallpaperPackage) -> WallpaperResult { return WallpaperResult() }
-    func reset(package: WallpaperPackage) -> WallpaperResult { return WallpaperResult() }
+    func importPackage(from path: String) -> WallpaperResult {
+        WallpaperResult(success: false, message: "")
+    }
+
+    func install(package: WallpaperPackage) -> WallpaperResult {
+        WallpaperResult(success: false, message: "")
+    }
+
+    func reset(package: WallpaperPackage) -> WallpaperResult {
+        WallpaperResult(success: false, message: "")
+    }
 }
 
 struct WallpaperPackage: Identifiable {
