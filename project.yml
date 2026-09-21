@@ -1,4 +1,4 @@
-name: 3105
+name: "3105"
 
 options:
   bundleIdPrefix: com.apple.mobile
@@ -8,12 +8,12 @@ options:
 
 settings:
   base:
-    SWIFT_VERSION: 5.0
+    SWIFT_VERSION: "5.0"
     DEVELOPMENT_TEAM: ""
     IPHONEOS_DEPLOYMENT_TARGET: "16.0"
 
 targets:
-  3105:
+  "3105":
     type: application
     platform: iOS
 
@@ -24,8 +24,40 @@ targets:
       path: ThreeOneOSFive/Info.plist
       properties:
         CFBundleDisplayName: Shinn Cheat
-        CFBundleShortVersionString: "2s.0"
+        CFBundleShortVersionString: "2.0"
         CFBundleVersion: "1"
 
-:    settings:
- []
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.apple.mobile.MobileHouseArrest
+        INFOPLIST_FILE: ThreeOneOSFive/Info.plist
+        SWIFT_OBJC_BRIDGING_HEADER: ThreeOneOSFive/ThreeOneOSFive-Bridging-Header.h
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SWIFT_VERSION: "5.0"
+        CODE_SIGNING_ALLOWED: "NO"
+        CODE_SIGNING_REQUIRED: "NO"
+        CODE_SIGN_IDENTITY: ""
+        PROVISIONING_PROFILE_SPECIFIER: ""
+        ENABLE_BITCODE: "NO"
+        CLANG_ENABLE_MODULES: "YES"
+        CLANG_ENABLE_OBJC_ARC: "YES"
+        HEADER_SEARCH_PATHS:
+          - "$(SRCROOT)/ThreeOneOSFive"
+          - "$(SRCROOT)/ThreeOneOSFive/exploit"
+          - "$(SRCROOT)/ThreeOneOSFive/kexploit"
+          - "$(SRCROOT)/ThreeOneOSFive/helpers"
+        OTHER_LDFLAGS:
+          - "-lz"
+          - "-framework"
+          - "Foundation"
+          - "-framework"
+          - "UIKit"
+          - "-framework"
+          - "IOSurface"
+          - "-framework"
+          - "AVFoundation"
+          - "-framework"
+          - "Security"
+
+    scheme:
+      testTargets: []
