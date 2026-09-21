@@ -21,7 +21,13 @@ targets:
       - path: ThreeOneOSFive
         excludes:
           - "Info.plist"
+          - "en.Iproj/**"
+          - "zh-Hans.Iproj/**"
           - "*.entitlements"
+
+    resources:
+      - path: ThreeOneOSFive/en.Iproj
+      - path: ThreeOneOSFive/zh-Hans.Iproj
 
     info:
       path: ThreeOneOSFive/Info.plist
