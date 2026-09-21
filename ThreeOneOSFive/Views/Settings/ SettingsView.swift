@@ -13,7 +13,7 @@ struct SettingsView: View {
                         Text("Tiếng Việt").tag("vi")
                         Text("简体中文").tag("zh-Hans")
                     }
-                    .onChange(of: language) { _, newValue in
+                    .onChange(of: language) { newValue in
                         appState.setLanguage(newValue)
                     }
                 }
