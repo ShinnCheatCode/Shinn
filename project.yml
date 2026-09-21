@@ -4,6 +4,7 @@ options:
   bundleIdPrefix: com.apple.mobile
   deploymentTarget:
     iOS: "16.0"
+  xcodeVersion: "16.0"
 
 settings:
   base:
@@ -22,7 +23,14 @@ targets:
           - "Info.plist"
           - "en.Iproj/**"
           - "zh-Hans.Iproj/**"
+          - "vi.Iproj/**"
           - "*.entitlements"
+
+      - path: ThreeOneOSFive-Bridging-Header.h
+
+    resources:
+      - path: ThreeOneOSFive/Resources
+      - path: ThreeOneOSFive/vi.Iproj
 
     info:
       path: ThreeOneOSFive/Info.plist
@@ -34,11 +42,16 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: "com.apple.mobile.MobileHouseArrest"
+
         INFOPLIST_FILE: "ThreeOneOSFive/Info.plist"
 
         TARGETED_DEVICE_FAMILY: "1,2"
+
         IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+
         SWIFT_VERSION: "5.0"
+
+        SWIFT_OBJC_BRIDGING_HEADER: "$(SRCROOT)/ThreeOneOSFive-Bridging-Header.h"
 
         CODE_SIGNING_ALLOWED: "NO"
         CODE_SIGNING_REQUIRED: "NO"
@@ -47,10 +60,9 @@ targets:
         PROVISIONING_PROFILE_SPECIFIER: ""
 
         ENABLE_BITCODE: "NO"
+
         CLANG_ENABLE_MODULES: "YES"
         CLANG_ENABLE_OBJC_ARC: "YES"
-
-        SWIFT_OBJC_BRIDGING_HEADER: "$(SRCROOT)/ThreeOneOSFive/ThreeOneOSFive-Bridging-Header.h"
 
         HEADER_SEARCH_PATHS:
           - "$(SRCROOT)/ThreeOneOSFive"
