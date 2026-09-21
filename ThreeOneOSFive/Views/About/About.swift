@@ -1,3 +1,6 @@
+import SwiftUI
+import UIKit
+
 struct AboutView: View {
     @State private var copied = false
 
@@ -78,23 +81,4 @@ struct AboutView: View {
                 }
                 Spacer()
                 if !trailing.isEmpty {
-                    Image(systemName: trailing)
-                        .font(.footnote)
-                        .foregroundStyle(Color.white.opacity(0.35))
-                }
-            }
-            .padding(14)
-            .background(Color(white: 0.12))
-            .clipShape(RoundedRectangle(cornerRadius: 18))
-        }
-        .buttonStyle(.plain)
-    }
-
-    private func openTG(_ user: String) {
-        if let tg = URL(string: "tg://resolve?domain=\(user)"), UIApplication.shared.canOpenURL(tg) {
-            UIApplication.shared.open(tg)
-        } else if let web = URL(string: "https://t.me/\(user)") {
-            UIApplication.shared.open(web)
-        }
-    }
-}
+                    Image(systemName
